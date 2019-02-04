@@ -23,15 +23,65 @@ void CachedEnable::enable(bool _enable)
 		return;
 
 	if (_enable) {
-		if (m_parameter == enable::BLEND && IS_GL_FUNCTION_VALID(Enablei))
-			glEnablei(GLenum(m_parameter), 0);
-		else
-			glEnable(GLenum(m_parameter));
+		switch(GLenum(m_parameter)) {
+			case GL_BLEND:
+				if(IS_GL_FUNCTION_VALID(glEnablei))
+					glEnablei(GL_BLEND, 0);
+				else
+					glEnable(GL_BLEND);
+				break;
+			case GL_CULL_FACE:
+				glEnable(GL_CULL_FACE);
+				break;
+			case GL_DEPTH_TEST:
+				glEnable(GL_DEPTH_TEST);
+				break;
+			case GL_DEPTH_CLAMP:
+				glEnable(GL_DEPTH_CLAMP);
+				break;
+			case GL_CLIP_DISTANCE0:
+				glEnable(GL_CLIP_DISTANCE0);
+				break;
+			case GL_DITHER:
+				glEnable(GL_DITHER);
+				break;
+			case GL_POLYGON_OFFSET_FILL:
+				glEnable(GL_POLYGON_OFFSET_FILL);
+				break;
+			case GL_SCISSOR_TEST:
+				glEnable(GL_SCISSOR_TEST);
+				break;
+		}
 	} else {
-		if (m_parameter == enable::BLEND && IS_GL_FUNCTION_VALID(Disablei))
-			glDisablei(GLenum(m_parameter), 0);
-		else
-			glDisable(GLenum(m_parameter));
+		switch(GLenum(m_parameter)) {
+			case GL_BLEND:
+				if(IS_GL_FUNCTION_VALID(glDisablei))
+					glDisablei(GL_BLEND, 0);
+				else
+					glDisable(GL_BLEND);
+				break;
+			case GL_CULL_FACE:
+				glDisable(GL_CULL_FACE);
+				break;
+			case GL_DEPTH_TEST:
+				glDisable(GL_DEPTH_TEST);
+				break;
+			case GL_DEPTH_CLAMP:
+				glDisable(GL_DEPTH_CLAMP);
+				break;
+			case GL_CLIP_DISTANCE0:
+				glDisable(GL_CLIP_DISTANCE0);
+				break;
+			case GL_DITHER:
+				glDisable(GL_DITHER);
+				break;
+			case GL_POLYGON_OFFSET_FILL:
+				glDisable(GL_POLYGON_OFFSET_FILL);
+				break;
+			case GL_SCISSOR_TEST:
+				glDisable(GL_SCISSOR_TEST);
+				break;
+		}
 	}
 }
 

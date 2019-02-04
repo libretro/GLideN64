@@ -2,13 +2,16 @@
 #include "Types.h"
 #include "mupenplus/GLideN64_mupenplus.h"
 #include "N64.h"
+#include <cstddef>
+
+extern uint32_t rdram_size;
 
 extern "C" {
 
 EXPORT int CALL RomOpen(void)
 {
-	if (rdram_size != nullptr)
-		RDRAMSize = *rdram_size - 1;
+	if (rdram_size != 0)
+		RDRAMSize = rdram_size - 1;
 	else
 		RDRAMSize = 0;
 

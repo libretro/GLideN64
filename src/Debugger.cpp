@@ -3,7 +3,6 @@
 #include "math.h"
 #include "Platform.h"
 #include "GLideN64.h"
-#include "Revision.h"
 #include "RSP.h"
 #include "Config.h"
 #include "Combiner.h"
