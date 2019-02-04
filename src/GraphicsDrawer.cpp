@@ -33,8 +33,6 @@ GraphicsDrawer::GraphicsDrawer()
 
 GraphicsDrawer::~GraphicsDrawer()
 {
-	while (!m_osdMessages.empty())
-		std::this_thread::sleep_for(Milliseconds(1));
 }
 
 void GraphicsDrawer::addTriangle(u32 _v0, u32 _v1, u32 _v2)
@@ -1583,129 +1581,19 @@ void GraphicsDrawer::Statistics::clear()
 
 void GraphicsDrawer::_drawOSD(const char *_pText, float _x, float & _y)
 {
-	float tW, tH;
-	g_textDrawer.getTextSize(_pText, tW, tH);
-
-	const bool top = (config.posTop & config.onScreenDisplay.pos) != 0;
-	const bool right = (config.onScreenDisplay.pos == Config::posTopRight) || (config.onScreenDisplay.pos == Config::posBottomRight);
-	const bool center = (config.onScreenDisplay.pos == Config::posTopCenter) || (config.onScreenDisplay.pos == Config::posBottomCenter);
-
-	if (center)
-		_x = -tW * 0.5f;
-	else if (right)
-		_x -= tW;
-
-	if (top)
-		_y -= tH;
-
-	drawText(_pText, _x, _y);
-
-	if (top)
-		_y -= tH * 0.5f;
-	else
-		_y += tH * 1.5f;
+    
 }
 
 void GraphicsDrawer::drawOSD()
 {
-	if ((config.onScreenDisplay.fps |
-		config.onScreenDisplay.vis |
-		config.onScreenDisplay.percent |
-		config.onScreenDisplay.internalResolution |
-		config.onScreenDisplay.renderingResolution |
-		config.onScreenDisplay.statistics
-		) == 0 &&
-		m_osdMessages.empty())
-		return;
-
-	gfxContext.bindFramebuffer(bufferTarget::DRAW_FRAMEBUFFER, ObjectHandle::defaultFramebuffer);
-
-	DisplayWindow & wnd = DisplayWindow::get();
-	const s32 X = (wnd.getScreenWidth() - wnd.getWidth()) / 2;
-	const s32 Y = static_cast<s32>(wnd.getHeightOffset());
-	const s32 W = static_cast<s32>(wnd.getWidth());
-	const s32 H = static_cast<s32>(wnd.getHeight());
-
-	gfxContext.setViewport(X, Y, W, H);
-	gfxContext.setScissor(X, Y, W, H);
-
-	gSP.changed |= CHANGED_VIEWPORT;
-	gDP.changed |= CHANGED_SCISSOR;
-
-
-	const bool bottom = (config.posBottom & config.onScreenDisplay.pos) != 0;
-	const bool left = (config.onScreenDisplay.pos == Config::posTopLeft) || (config.onScreenDisplay.pos == Config::posBottomLeft);
-
-	const float hp = left ? -1.0f : 1.0f;
-	const float vp = bottom ? -1.0f : 1.0f;
-
-	float hShift, vShift;
-	g_textDrawer.getTextSize("0", hShift, vShift);
-	hShift *= 0.5f;
-	vShift *= 0.5f;
-	const float x = hp - hShift * hp;
-	float y = vp - vShift * vp;
-	char buf[256];
-
-	if (config.onScreenDisplay.fps) {
-		sprintf(buf, "%d FPS", int(perf.getFps()));
-		_drawOSD(buf, x, y);
-	}
-
-	if (config.onScreenDisplay.vis) {
-		sprintf(buf, "%d VI/S", int(perf.getVIs()));
-		_drawOSD(buf, x, y);
-	}
-
-	if (config.onScreenDisplay.percent) {
-		sprintf(buf, "%d %%", int(perf.getPercent()));
-		_drawOSD(buf, x, y);
-	}
-
-	if (config.onScreenDisplay.renderingResolution) {
-		sprintf(buf, "Rendering Resolution %ux%u", wnd.getScreenWidth(), wnd.getScreenHeight());
-		_drawOSD(buf, x, y);
-	}
-
-	if (config.onScreenDisplay.internalResolution) {
-		FrameBuffer * pBuffer = frameBufferList().getCurrent();
-		if (pBuffer != nullptr && VI.width != 0) {
-			const float aspect = float(VI.height) / float(VI.width);
-			const u32 height = u32(pBuffer->m_width * aspect);
-			sprintf(buf, "Internal Resolution %ux%u", pBuffer->m_width, height);
-			_drawOSD(buf, x, y);
-		}
-	}
-
-	if (config.onScreenDisplay.statistics) {
-		if (RSP.LLE)
-			sprintf(buf, "fill rects: %3u | tex rects: %3u | triangles: %5u",
-				m_statistics.fillRects, m_statistics.texRects, m_statistics.drawnTris);
-		else
-			sprintf(buf, "fill rects: %3u | tex rects: %3u | lines: %4u | tris drawn: %4u | clipped: %4u | culled: %4u | total: %5u",
-				m_statistics.fillRects, m_statistics.texRects, m_statistics.lines,
-				m_statistics.drawnTris, m_statistics.clippedTris, m_statistics.culledTris,
-				m_statistics.drawnTris + m_statistics.clippedTris + m_statistics.culledTris);
-		_drawOSD(buf, x, y);
-	}
-
-
-	for (const std::string & m : m_osdMessages) {
-		_drawOSD(m.c_str(), x, y);
-	}
 }
 
 void GraphicsDrawer::showMessage(std::string _message, Milliseconds _interval)
 {
-	m_osdMessages.emplace_back(_message);
-	std::thread t(&GraphicsDrawer::_removeOSDMessage, this, std::prev(m_osdMessages.end()), _interval);
-	t.detach();
 }
 
 void GraphicsDrawer::_removeOSDMessage(OSDMessages::iterator _iter, Milliseconds _interval)
 {
-	std::this_thread::sleep_for(_interval);
-	m_osdMessages.erase(_iter);
 }
 
 void GraphicsDrawer::clearDepthBuffer()
