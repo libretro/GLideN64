@@ -26,35 +26,6 @@ static alloc_device_t *allocDev{};
 
 static void initAllocDev()
 {
-	if(allocDev)
-		return;
-	if(!libhardware_dl())
-	{
-		LOG(LOG_ERROR,"Incompatible libhardware.so");
-		return;
-	}
-	if(hw_get_module(GRALLOC_HARDWARE_MODULE_ID, (hw_module_t const**)&grallocMod) != 0)
-	{
-		LOG(LOG_ERROR,"Can't load gralloc module");
-		return;
-	}
-	gralloc_open((const hw_module_t*)grallocMod, &allocDev);
-	if(!allocDev)
-	{
-		LOG(LOG_ERROR,"Can't load allocator device");
-		return;
-	}
-	if(!allocDev->alloc || !allocDev->free)
-	{
-		LOG(LOG_ERROR,"Missing alloc/free functions");
-		if(allocDev->common.close)
-			gralloc_close(allocDev);
-		else
-			LOG(LOG_WARNING,"Missing device close function");
-		allocDev = {};
-		return;
-	}
-	LOG(LOG_MINIMAL,"alloc device:%p", allocDev);
 }
 
 GraphicBuffer::GraphicBuffer()

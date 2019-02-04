@@ -583,7 +583,7 @@ TxUtil::StrongCRC32_CI8(const uint8* src, int width, int height, int rowStride,
 
 uint32 TxUtil::getNumberofProcessors()
 {
-	uint32 numcore = std::thread::hardware_concurrency();
+	uint32 numcore = 1; //std::thread::hardware_concurrency();
 	if (numcore > MAX_NUMCORE) numcore = MAX_NUMCORE;
 	DBG_INFO(80, wst("Number of processors : %d\n"), numcore);
 	return numcore;

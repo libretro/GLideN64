@@ -10,9 +10,6 @@
 #include <algorithm>
 #include <assert.h>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include "Platform.h"
 #include "DisplayWindow.h"
 #include "GraphicsDrawer.h"
@@ -66,10 +63,8 @@ struct Atlas {
 		float ty;	// y offset of glyph in texture coordinates
 	} c[128];		// character information
 
-	Atlas(FT_Face face, int height)
+	Atlas()
 	{
-		FT_Set_Pixel_Sizes(face, 0, height);
-		FT_GlyphSlot g = face->glyph;
 
 		int roww = 0;
 		int rowh = 0;
@@ -78,21 +73,6 @@ struct Atlas {
 
 		memset(c, 0, sizeof c);
 
-		/* Find minimum size for a texture holding all visible ASCII characters */
-		for (int i = 32; i < 128; i++) {
-			if (FT_Load_Char(face, i, FT_LOAD_RENDER)) {
-				fprintf(stderr, "Loading character %c failed!\n", i);
-				continue;
-			}
-			if (roww + g->bitmap.width + 1 >= MAXWIDTH) {
-				w = std::max(w, roww);
-				h += rowh;
-				roww = 0;
-				rowh = 0;
-			}
-			roww += g->bitmap.width + 1;
-			rowh = std::max(rowh, (int)g->bitmap.rows);
-		}
 
 		w = std::max(w, roww);
 		h += rowh;
@@ -150,43 +130,6 @@ struct Atlas {
 		int oy = 0;
 		rowh = 0;
 
-		for (int i = 32; i < 128; i++) {
-			if (FT_Load_Char(face, i, FT_LOAD_RENDER)) {
-				fprintf(stderr, "Loading character %c failed!\n", i);
-				continue;
-			}
-
-			if (ox + g->bitmap.width + 1 >= MAXWIDTH) {
-				oy += rowh;
-				rowh = 0;
-				ox = 0;
-			}
-
-			if (g->bitmap.buffer != nullptr) {
-				updateParams.x = ox;
-				updateParams.y = oy;
-				updateParams.width = g->bitmap.width;
-				updateParams.height = g->bitmap.rows;
-				updateParams.data = g->bitmap.buffer;
-				gfxContext.update2DTexture(updateParams);
-			}
-
-			c[i].ax = _FIXED2FLOAT(g->advance.x, 6);
-			c[i].ay = _FIXED2FLOAT(g->advance.y, 6);
-
-			c[i].bw = (float)g->bitmap.width;
-			c[i].bh = (float)g->bitmap.rows;
-
-			c[i].bl = (float)g->bitmap_left;
-			c[i].bt = (float)g->bitmap_top;
-
-			c[i].tx = ox / (float)w;
-			c[i].ty = oy / (float)h;
-
-			rowh = std::max(rowh, (int)g->bitmap.rows);
-			ox += g->bitmap.width + 1;
-		}
-
 		gfxContext.setTextureUnpackAlignment(curUnpackAlignment);
 
 		LOG(LOG_VERBOSE, "Generated a %d x %d (%d kb) texture atlas", w, h, w * h / 1024);
@@ -229,8 +172,6 @@ bool getFontFileName(char * _strName)
 	return true;
 }
 
-FT_Library g_ft;
-FT_Face g_face;
 
 void TextDrawer::init()
 {
@@ -241,20 +182,8 @@ void TextDrawer::init()
 	else
 		return;
 
-	/* Initialize the FreeType2 library */
-	if (FT_Init_FreeType(&g_ft)) {
-		fprintf(stderr, "Could not init freetype library\n");
-		return;
-	}
-
-	/* Load a font */
-	if (FT_New_Face(g_ft, fontfilename, 0, &g_face)) {
-		fprintf(stderr, "Could not open font %s\n", fontfilename);
-		return;
-	}
 
 	/* Create texture atlas for selected font size */
-	m_atlas.reset(new Atlas(g_face, config.font.size));
 
 	m_program.reset(gfxContext.createTextDrawerShader());
 }
@@ -263,10 +192,6 @@ void TextDrawer::destroy()
 {
 	m_atlas.reset();
 	m_program.reset();
-	FT_Done_Face(g_face);
-	g_face = NULL;
-	FT_Done_FreeType(g_ft);
-	g_ft = NULL;
 }
 
 /**
