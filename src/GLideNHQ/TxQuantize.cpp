@@ -860,30 +860,30 @@ TxQuantize::quantize(uint8* src, uint8* dest, int width, int height, ColorFormat
 			numcore--;
 		}
 		if (blkrow > 0 && numcore > 1) {
-			std::thread *thrd[MAX_NUMCORE];
+		//	std::thread *thrd[MAX_NUMCORE];
 			unsigned int i;
 			int blkheight = blkrow << 2;
 			unsigned int srcStride = (width * blkheight) << (2 - bpp_shift);
 			unsigned int destStride = srcStride << bpp_shift;
 			for (i = 0; i < numcore - 1; i++) {
-				thrd[i] = new std::thread(std::bind(quantizer,
+				/*thrd[i] = new std::thread(std::bind(quantizer,
 														this,
 														(uint32*)src,
 														(uint32*)dest,
 														width,
-														blkheight));
+														blkheight));*/
 				src  += srcStride;
 				dest += destStride;
 			}
-			thrd[i] = new std::thread(std::bind(quantizer,
+			/*thrd[i] = new std::thread(std::bind(quantizer,
 													this,
 													(uint32*)src,
 													(uint32*)dest,
 													width,
-													height - blkheight * i));
+													height - blkheight * i));*/
 			for (i = 0; i < numcore; i++) {
-				thrd[i]->join();
-				delete thrd[i];
+			//	thrd[i]->join();
+			//	delete thrd[i];
 			}
 		} else {
 			(*this.*quantizer)((uint32*)src, (uint32*)dest, width, height);
@@ -909,30 +909,30 @@ TxQuantize::quantize(uint8* src, uint8* dest, int width, int height, ColorFormat
 			numcore--;
 		}
 		if (blkrow > 0 && numcore > 1) {
-			std::thread *thrd[MAX_NUMCORE];
+			//std::thread *thrd[MAX_NUMCORE];
 			unsigned int i;
 			int blkheight = blkrow << 2;
 			unsigned int srcStride = (width * blkheight) << 2;
 			unsigned int destStride = srcStride >> bpp_shift;
 			for (i = 0; i < numcore - 1; i++) {
-				thrd[i] = new std::thread(std::bind(quantizer,
+				/*thrd[i] = new std::thread(std::bind(quantizer,
 														this,
 														(uint32*)src,
 														(uint32*)dest,
 														width,
-														blkheight));
+														blkheight));*/
 				src  += srcStride;
 				dest += destStride;
 			}
-			thrd[i] = new std::thread(std::bind(quantizer,
+			/*thrd[i] = new std::thread(std::bind(quantizer,
 													this,
 													(uint32*)src,
 													(uint32*)dest,
 													width,
-													height - blkheight * i));
+													height - blkheight * i));*/
 			for (i = 0; i < numcore; i++) {
-				thrd[i]->join();
-				delete thrd[i];
+			//	thrd[i]->join();
+			//	delete thrd[i];
 			}
 		} else {
 			(*this.*quantizer)((uint32*)src, (uint32*)dest, width, height);

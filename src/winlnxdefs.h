@@ -30,7 +30,6 @@
 #ifndef WINLNXDEFS_H
 #define WINLNXDEFS_H
 
-#include <dlfcn.h>
 #include <errno.h>
 #include <limits.h> // PATH_MAX
 #include <stdlib.h> // malloc(), srand()
