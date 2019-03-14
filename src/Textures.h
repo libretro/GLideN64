@@ -111,12 +111,7 @@ private:
 	s32 m_curUnpackAlignment;
 	bool m_toggleDumpTex;
 	std::vector<u32> m_tempTextureHolder;
-
-#ifdef VC
-	const size_t m_maxCacheSize = 1500u;
-#else
-	const size_t m_maxCacheSize = 8000u;
-#endif
+	
 	u64 m_hdTexCacheSize = 0u;
 };
 
