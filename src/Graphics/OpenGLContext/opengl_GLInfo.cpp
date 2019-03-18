@@ -38,8 +38,15 @@ void GLInfo::init() {
 		glGetIntegerv(GL_MAJOR_VERSION, &majorVersion);
 		glGetIntegerv(GL_MINOR_VERSION, &minorVersion);
 	}
-	LOG(LOG_VERBOSE, "%s major version: %d", isGLESX ? "OpenGL ES" : "OpenGL", majorVersion);
-	LOG(LOG_VERBOSE, "%s minor version: %d", isGLESX ? "OpenGL ES" : "OpenGL", minorVersion);
+
+#if defined(HAVE_OPENGLES2) // Overwrite
+	isGLES2 = true;
+	majorVersion = 2;
+	minorVersion = 0;
+#endif
+
+	LOG(LOG_VERBOSE, "%s major version: %d\n", isGLESX ? "OpenGL ES" : "OpenGL", majorVersion);
+	LOG(LOG_VERBOSE, "%s minor version: %d\n", isGLESX ? "OpenGL ES" : "OpenGL", minorVersion);
 
 
 	LOG(LOG_VERBOSE, "OpenGL vendor: %s", glGetString(GL_VENDOR));
