@@ -206,8 +206,9 @@ extern PFNGLEGLIMAGETARGETTEXTURE2DOESPROC ptrEGLImageTargetTexture2DOES;
 typedef void (APIENTRYP PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC) (GLenum target, void* image);
 extern PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC ptrEGLImageTargetRenderbufferStorageOES;
 
-void initGLFunctions();
+extern "C" void initGLFunctions();
 
+#ifndef NO_GL_WRAP
 #define glGetError(...) opengl::FunctionWrapper::wrGetError(__VA_ARGS__)
 #define glBlendFunc(...) opengl::FunctionWrapper::wrBlendFunc(__VA_ARGS__)
 #define glBlendFuncSeparate(...) opengl::FunctionWrapper::wrBlendFuncSeparate(__VA_ARGS__)
