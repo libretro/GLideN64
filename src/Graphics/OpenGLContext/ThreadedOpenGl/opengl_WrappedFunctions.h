@@ -25,6 +25,26 @@
 #include <Graphics/OpenGLContext/windows/WindowsWGL.h>
 #endif
 
+#if defined(__LIBRETRO__) && !defined(NO_GL_WRAP)
+enum glsm_state_ctl
+{
+   GLSM_CTL_NONE = 0,
+   GLSM_CTL_STATE_SETUP,
+   GLSM_CTL_STATE_BIND,
+   GLSM_CTL_STATE_UNBIND,
+   GLSM_CTL_STATE_CONTEXT_RESET,
+   GLSM_CTL_STATE_CONTEXT_DESTROY,
+   GLSM_CTL_STATE_CONTEXT_INIT,
+   GLSM_CTL_IS_IMM_VBO,
+   GLSM_CTL_SET_IMM_VBO,
+   GLSM_CTL_UNSET_IMM_VBO,
+   GLSM_CTL_IMM_VBO_DISABLE,
+   GLSM_CTL_IMM_VBO_DRAW,
+   GLSM_CTL_PROC_ADDRESS_GET
+};
+extern "C" bool glsm_ctl(enum glsm_state_ctl state, void *data);
+#endif
+
 namespace opengl {
 
 class GlBlendFuncCommand : public OpenGlCommand
@@ -5014,7 +5034,9 @@ public:
 
 	void commandToExecute() override
 	{
-		*m_returnValue = ::CoreVideo_Init();
+#ifndef __LIBRETRO__
+		::CoreVideo_Init();
+#endif
 	}
 
 private:
@@ -5043,7 +5065,9 @@ public:
 
 	void commandToExecute() override
 	{
+#ifndef __LIBRETRO__
 		::CoreVideo_Quit();
+#endif
 	}
 
 private:
@@ -5071,7 +5095,12 @@ public:
 
 	void commandToExecute() override
 	{
+#ifdef __LIBRETRO__
+		*m_returnValue = m64p_error::M64ERR_SUCCESS;
+		glsm_ctl(GLSM_CTL_STATE_CONTEXT_RESET, NULL);
+#else
 		*m_returnValue = ::CoreVideo_SetVideoMode(m_screenWidth, m_screenHeight, m_bitsPerPixel, m_mode, m_flags);
+#endif
 
 		initGLFunctions();
 	}
@@ -5160,7 +5189,9 @@ public:
 
 	void commandToExecute() override
 	{
+#ifndef __LIBRETRO__
 		::CoreVideo_GL_SetAttribute(m_attribute, m_value);
+#endif
 	}
 
 private:
@@ -5192,7 +5223,9 @@ public:
 
 	void commandToExecute() override
 	{
+#ifndef __LIBRETRO__
 		::CoreVideo_GL_GetAttribute(m_attribute, m_value);
+#endif
 	}
 
 private:
@@ -5224,7 +5257,9 @@ public:
 
 	void commandToExecute() override
 	{
+#ifndef __LIBRETRO__
 		::CoreVideo_GL_SwapBuffers();
+#endif
 		m_swapBuffersCallback();
 	}
 

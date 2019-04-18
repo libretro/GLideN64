@@ -1505,6 +1505,7 @@ namespace opengl {
 			executeCommand(CoreVideoGLSwapBuffersCommand::get([]{ReduceSwapBuffersQueued();}));
 		else
 			CoreVideoGLSwapBuffersCommand::get([]{ReduceSwapBuffersQueued();})->performCommandSingleThreaded();
+
 	}
 #else
 	bool FunctionWrapper::windowsStart()
