@@ -90,6 +90,8 @@ extern PFNGLFINISHPROC ptrFinish;
 extern PFNGLFLUSHPROC ptrFlush;
 
 #if defined(OS_ANDROID)
+struct AHardwareBuffer;
+typedef EGLClientBuffer (EGLAPIENTRYP PFNEGLGETNATIVECLIENTBUFFERANDROIDPROC) (const struct AHardwareBuffer *buffer);
 extern PFNEGLGETNATIVECLIENTBUFFERANDROIDPROC ptrGetNativeClientBufferANDROID;
 #endif
 
