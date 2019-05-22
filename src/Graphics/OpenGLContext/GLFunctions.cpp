@@ -15,6 +15,7 @@
 #elif defined(VERO4K) || defined(ODROID) || defined(VC)
 #include <dlfcn.h>
 
+#include <dlfcn.h>
 #define GL_GET_PROC_ADR(proc_type, proc_name) ptr##proc_name = (proc_type) dlsym(gles2so, "gl"#proc_name);
 
 #elif defined(EGL)
