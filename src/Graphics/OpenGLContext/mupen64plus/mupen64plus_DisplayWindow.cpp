@@ -61,7 +61,7 @@ DisplayWindow & DisplayWindow::get()
 
 void DisplayWindowMupen64plus::_setAttributes()
 {
-	LOG(LOG_VERBOSE, "[gles2GlideN64]: _setAttributes\n");
+	LOG(LOG_VERBOSE, "[gles2GlideN64]: _setAttributes");
 }
 
 bool DisplayWindowMupen64plus::_start()
@@ -76,7 +76,7 @@ bool DisplayWindowMupen64plus::_start()
 	_getDisplaySize();
 	_setBufferSize();
 	
-	LOG(LOG_VERBOSE, "[GLideN64]: Create setting videomode %dx%d\n", m_screenWidth, m_screenHeight);
+	LOG(LOG_VERBOSE, "[GLideN64]: Create setting videomode %dx%d", m_screenWidth, m_screenHeight);
 
 	return true;
 }

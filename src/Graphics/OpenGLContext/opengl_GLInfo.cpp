@@ -45,8 +45,8 @@ void GLInfo::init() {
 	minorVersion = 0;
 #endif
 
-	LOG(LOG_VERBOSE, "%s major version: %d\n", isGLESX ? "OpenGL ES" : "OpenGL", majorVersion);
-	LOG(LOG_VERBOSE, "%s minor version: %d\n", isGLESX ? "OpenGL ES" : "OpenGL", minorVersion);
+	LOG(LOG_VERBOSE, "%s major version: %d", isGLESX ? "OpenGL ES" : "OpenGL", majorVersion);
+	LOG(LOG_VERBOSE, "%s minor version: %d", isGLESX ? "OpenGL ES" : "OpenGL", minorVersion);
 
 
 	LOG(LOG_VERBOSE, "OpenGL vendor: %s", glGetString(GL_VENDOR));
