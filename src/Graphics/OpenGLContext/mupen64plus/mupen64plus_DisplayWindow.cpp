@@ -17,10 +17,6 @@
 #include <libretro_private.h>
 #include "../../../../../custom/GLideN64/mupenplus/GLideN64_mupenplus.h"
 
-#ifdef VC
-#include <bcm_host.h>
-#endif
-
 using namespace opengl;
 
 #ifdef __cplusplus
@@ -135,21 +131,6 @@ void DisplayWindowMupen64plus::_changeWindow()
 
 void DisplayWindowMupen64plus::_getDisplaySize()
 {
-#ifdef VC
-	if( m_bFullscreen ) {
-		// Use VC get_display_size function to get the current screen resolution
-		u32 fb_width;
-		u32 fb_height;
-		auto returnValue = graphics_get_display_size(0 /* LCD */, &fb_width, &fb_height);
-		if (returnValue < 0)
-			LOG(LOG_ERROR, "Failed to get display size. Error code: %d", returnValue);
-		else {
-			LOG(LOG_VERBOSE, "Display size %dx%d", fb_width, fb_height);
-			m_screenWidth = fb_width;
-			m_screenHeight = fb_height;
-		}
-	}
-#endif
 }
 
 void DisplayWindowMupen64plus::_readScreen(void **_pDest, long *_pWidth, long *_pHeight)
