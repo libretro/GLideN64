@@ -34,8 +34,8 @@ NoiseTexture::NoiseTexture()
 		m_pTexture[i] = nullptr;
 }
 
-static
-u32 Rand(u32 rand_value)
+
+inline u32 irand()
 {
 	static u32 iseed = 1;
 	iseed *= 0x343fd;
@@ -43,16 +43,16 @@ u32 Rand(u32 rand_value)
 	return ((iseed >> 16) & 0x7fff);
 }
 
+
 static
 void FillTextureData(u32 _seed, NoiseTexturesData * _pData, u32 _start, u32 _stop)
 {
-	srand(_seed);
 	for (u32 i = _start; i < _stop; ++i) {
 		auto & vec = _pData->at(i);
 		const size_t sz = vec.size();
 		u32 rand_value(0U);
 		for (size_t t = 0; t < sz; ++t) {
-			rand_value = Rand(rand_value);
+			rand_value = irand();
 			vec[t] = rand_value & 0xFF;
 		}
 	}
@@ -131,7 +131,7 @@ void NoiseTexture::update()
 
 	u32 rand_value(0U);
 	while (m_currTex == m_prevTex) {
-		rand_value = Rand(rand_value);
+		rand_value = irand();
 		m_currTex = rand_value % NOISE_TEX_NUM;
 	}
 	m_prevTex = m_currTex;
