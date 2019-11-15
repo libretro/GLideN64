@@ -354,6 +354,7 @@ extern "C" void initGLFunctions();
 #define glDebugMessageControl(...) opengl::FunctionWrapper::wrDebugMessageControl(__VA_ARGS__)
 #define glEGLImageTargetTexture2DOES(...) opengl::FunctionWrapper::wrEGLImageTargetTexture2DOES(__VA_ARGS__)
 #define glEGLImageTargetRenderbufferStorageOES(...) opengl::FunctionWrapper::wrEGLImageTargetRenderbufferStorageOES(__VA_ARGS__)
+#endif
 
 #define GL_TEXTURE_EXTERNAL_OES 0x8D65
 
