@@ -27,12 +27,7 @@ void Config::resetToDefaults()
 	video.multisampling = 0;
 	video.maxMultiSampling = 0;
 	video.verticalSync = 0;
-
-#if defined(OS_ANDROID)
-	video.threadedVideo = 1;
-#else
 	video.threadedVideo = 0;
-#endif
 
 	texture.maxAnisotropy = 0;
 	texture.bilinearMode = BILINEAR_STANDARD;
