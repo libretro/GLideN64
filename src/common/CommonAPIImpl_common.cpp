@@ -193,12 +193,12 @@ void PluginAPI::RomClosed()
 	dwnd().stop();
 	GBI.destroy();
 #endif
-	osal_keys_quit();
+	//osal_keys_quit();
 }
 
 int PluginAPI::RomOpen()
 {
-	osal_keys_init();
+	//osal_keys_init();
 
 	LOG(LOG_APIFUNC, "RomOpen");
 #ifdef RSPTHREAD
