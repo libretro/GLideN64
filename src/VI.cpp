@@ -105,6 +105,7 @@ void VI_UpdateSize()
 
 static void checkHotkeys()
 {
+	/*
 	osal_keys_update_state();
 
 	if (osal_is_key_pressed(KEY_G, 0x0001)) {
@@ -121,7 +122,7 @@ static void checkHotkeys()
 	}
 
 	if (config.textureFilter.txHiresEnable != 0) {
-		/* Force reload hi-res textures. Useful for texture artists */
+		// Force reload hi-res textures. Useful for texture artists
 		if (osal_is_key_pressed(config.hotkeys.enabledKeys[Config::hkHdTexReload], 0x0001)) {
 			dwnd().getDrawer().showMessage("Reload HD textures\n", Milliseconds(750));
 			if (txfilter_reloadhirestex()) {
@@ -129,7 +130,7 @@ static void checkHotkeys()
 			}
 		}
 
-		/* Turn on texture dump */
+		// Turn on texture dump
 		if (osal_is_key_pressed(config.hotkeys.enabledKeys[Config::hkTexDump], 0x0001))
 			textureCache().toggleDumpTex();
 
@@ -238,6 +239,7 @@ static void checkHotkeys()
 		else
 			dwnd().getDrawer().showMessage("Enable inaccurate texture coordinates\n", Milliseconds(1000));
 	}
+	*/
 }
 
 void VI_UpdateScreen()
