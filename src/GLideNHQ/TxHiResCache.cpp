@@ -172,12 +172,12 @@ TxHiResCache::LoadResult TxHiResCache::_loadHiResTextures(const wchar_t * dir_pa
 	tx_wstring texturefilename;
 
 	do {
-		osal_keys_update_state();
+		/*osal_keys_update_state();
 		if (osal_is_key_pressed(KEY_Escape, 0x0001)) {
 			_abortLoad = true;
 			if (_callback) (*_callback)(wst("Aborted loading hiresolution texture!\n"));
 			INFO(80, wst("Error: aborted loading hiresolution texture!\n"));
-		}
+		}*/
 		if (_abortLoad)
 			break;
 
