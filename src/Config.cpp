@@ -30,11 +30,7 @@ void Config::resetToDefaults()
 	video.verticalSync = 0;
 	video.deviceName[0] = L'\0';
 
-#if defined(OS_ANDROID)
-	video.threadedVideo = 1;
-#else
 	video.threadedVideo = 0;
-#endif
 
 	texture.anisotropy = 0;
 	texture.maxAnisotropy = 0;
